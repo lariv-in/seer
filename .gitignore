@@ -1,0 +1,7 @@
+/target
+*.db
+/filesystem
+/tmp
+.env
+*.sqlite
+.cursor/

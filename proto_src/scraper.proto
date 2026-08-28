@@ -1,0 +1,86 @@
+syntax = "proto3";
+package nodescraper;
+
+option go_package = "/messages";
+
+message Command {
+  uint64 id = 1;
+  oneof command_type {
+    GetID get_id = 2;
+    GetVersion get_version = 3;
+    TriggerScraper trigger_scraper = 4;
+  }
+}
+
+
+message GetVersion {}
+
+message GetID {}
+
+message TriggerScraper {
+  oneof scraper_args {
+    WebsiteScraperArgs website_scraper = 1;
+  }
+}
+
+message Response {
+  uint64 command_id = 1;
+  oneof response_type {
+    ResponseError error = 2;
+    ResponseOk ok = 3;
+  }
+}
+
+message ResponseOk {
+  oneof response {
+    VersionID id = 1;
+    VersionResponse version = 2;
+    WebsiteScraperResponse website_scraper = 3;
+  }
+}
+
+message VersionID {
+  uint64 id = 1;
+}
+
+message VersionResponse {
+  uint32 major = 1;
+  uint32 minor = 2;
+  uint32 patch = 3;
+}
+
+message WebsiteScraperArgs {
+  string source_url = 1;
+}
+
+message WebsiteScraperResponse {
+  string source_url = 1;
+  // Extracted readable content (markdown from dom_smoothie on the node).
+  string content = 2;
+  // Full rendered page HTML (for same-origin link discovery during crawls).
+  string rendered_html = 3;
+}
+
+message ResponseError {
+  oneof response_error {
+    UnknownCommandError unknown_command_error = 1;
+    MissingCommandFieldError missing_command_field_error = 2;
+    WebsiteScraperError website_scraper_error = 3;
+  }
+}
+
+message WebsiteScraperError {
+  oneof website_error {
+    Ratelimited ratelimited = 1;
+    ScrapeFailed scrape_failed = 2;
+  }
+}
+
+message ScrapeFailed {
+  string message = 1;
+}
+
+message Ratelimited {};
+
+message UnknownCommandError {}
+message MissingCommandFieldError {}

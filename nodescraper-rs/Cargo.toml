@@ -1,0 +1,46 @@
+[workspace]
+members = ["."]
+resolver = "2"
+
+[package]
+name = "nodescraper-rs"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "nodescraper_rs"
+path = "src/lib.rs"
+
+[[bin]]
+name = "nodescraper-rs"
+path = "src/main.rs"
+
+[dependencies]
+dom_smoothie = "0.17.0"
+env_logger = "0.11.10"
+futures-util = { version = "0.3.32", features = ["tokio-io"] }
+log = "0.4.29"
+prost = "0.14.3"
+prost-types = "0.14.3"
+dpi = "0.1"
+euclid = "0.22"
+rand = "0.10.1"
+servo = "0.4.0"
+servo-base = "0.4.0"
+tokio = { version = "1.52.3", features = ["full", "macros"] }
+tokio-tungstenite = { version = "0.29.0", features = ["url", "rustls-tls-native-roots"] }
+url = "2.5.8"
+uuid = { version = "1.23.1", features = ["v4"] }
+servo-allocator = { version = "0.4.0", default-features = false }
+crossbeam = { version = "0.8.4", features = ["crossbeam-channel"] }
+# servo-script 0.4.0 pins p256/p384/p521 =0.14.0-rc.14; those require primeorder
+# 0.14.0-rc.14. Cargo otherwise resolves primeorder 0.14.0 (stable), which needs
+# WnafSize impls the RC curve crates do not provide.
+primeorder = "=0.14.0-rc.14"
+
+[build-dependencies]
+prost-build = "0.14.3"
+
+[profile.release]
+lto = "thin"
+debug = 0

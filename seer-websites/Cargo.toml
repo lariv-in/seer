@@ -1,0 +1,30 @@
+[package]
+name = "seer-websites"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+lariv-rs = { workspace = true }
+seer-common = { workspace = true }
+seer-intel = { workspace = true }
+seer-node-fleet = { workspace = true }
+seer-workerregistry = { workspace = true }
+frunk = { workspace = true }
+frunk_core = { workspace = true }
+sea-orm = { workspace = true }
+sea-orm-migration = { workspace = true }
+async-trait = { workspace = true }
+axum = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+rune = { workspace = true }
+maud = { workspace = true }
+chrono = { workspace = true }
+anyhow = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+futures-util = { workspace = true }
+url = { workspace = true }
+scraper = { workspace = true }
+regex = { workspace = true }
+parking_lot = { workspace = true }

@@ -1,0 +1,30 @@
+[package]
+name = "seer-bin"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "seer-rs"
+path = "src/main.rs"
+
+[dependencies]
+lariv-rs = { workspace = true }
+tokio = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+seer-workerregistry = { workspace = true }
+seer-intel = { workspace = true }
+seer-node-fleet = { workspace = true }
+seer-websites = { workspace = true }
+seer-reddit = { workspace = true }
+# seer-twitter = { workspace = true }
+# seer-gdelt = { workspace = true }
+seer-opensky = { workspace = true }
+seer-aisstream = { workspace = true }
+seer-assistant = { workspace = true }
+
+[dev-dependencies]
+uuid = { workspace = true }
+tokio = { workspace = true }
+lariv-rs = { workspace = true }

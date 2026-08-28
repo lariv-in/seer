@@ -1,0 +1,8 @@
+[target.aarch64-unknown-linux-gnu]
+image = "ghcr.io/cross-rs/aarch64-unknown-linux-gnu:edge" # Ensure you use the edge image for modern nightly toolchains
+pre-build = [
+    "apt-get update && apt-get install -y clang protobuf-compiler"
+]
+
+[build]
+build-std = false                              # do not build the std library. has precedence over xargo

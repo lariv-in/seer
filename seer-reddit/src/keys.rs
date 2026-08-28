@@ -1,0 +1,9 @@
+lariv_rs::swap_key!(RedditTableKey, "seer-reddit-table");
+lariv_rs::swap_key!(RedditWorkersTableKey, "seer-reddit-workers-table");
+lariv_rs::swap_key!(RedditSourcesTableKey, "seer-reddit-sources-table");
+lariv_rs::swap_key!(RedditWorkerCreateModalKey, "seer-reddit-worker-create-modal");
+lariv_rs::swap_key!(RedditSourceCreateModalKey, "seer-reddit-source-create-modal");
+lariv_rs::swap_key!(RedditWorkerSelectTableKey, "seer-reddit-worker-select-table");
+lariv_rs::swap_key!(RedditWorkerSelectModalKey, "seer-reddit-worker-select-modal");
+lariv_rs::swap_key!(RedditSourceUnsetSelectTableKey, "seer-reddit-source-unset-select-table");
+lariv_rs::swap_key!(RedditSourceUnsetSelectModalKey, "seer-reddit-source-unset-select-modal");

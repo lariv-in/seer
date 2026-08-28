@@ -1,0 +1,9 @@
+[target.aarch64-unknown-linux-gnu]
+linker = "aarch64-linux-gnu-gcc"
+
+# Stylo bakes StyleThread stack size at compile time via option_env!.
+# crates.io defaults to 512 KiB, which overflows on complex pages (font/layout
+# recursion). Servo itself uses 8 MiB to match Chromium depth.
+# https://github.com/servo/servo/pull/43888
+[env]
+SERVO_STYLE_THREAD_STACK_SIZE_KB = "8192"

@@ -1,0 +1,17 @@
+[package]
+name = "seer-common"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+lariv-rs = { workspace = true }
+sea-orm = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+async-trait = { workspace = true }
+chrono = { workspace = true }
+anyhow = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+parking_lot = { workspace = true }
+maud = { workspace = true }

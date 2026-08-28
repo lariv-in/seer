@@ -1,0 +1,29 @@
+[package]
+name = "seer-node-fleet"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+lariv-rs = { workspace = true }
+seer-common = { workspace = true }
+frunk = { workspace = true }
+frunk_core = { workspace = true }
+sea-orm = { workspace = true }
+async-trait = { workspace = true }
+axum = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+maud = { workspace = true }
+chrono = { workspace = true }
+anyhow = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+futures-util = { workspace = true }
+prost = { workspace = true }
+prost-types = { workspace = true }
+bytes = { workspace = true }
+rand = { workspace = true }
+parking_lot = { workspace = true }
+
+[build-dependencies]
+prost-build = { workspace = true }

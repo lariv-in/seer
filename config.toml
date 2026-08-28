@@ -1,0 +1,23 @@
+database_url = "postgres://postgres:0708@localhost:5432/seer"
+bind = "0.0.0.0:42069"
+
+[users]
+adminEmail = "admin@lariv.in"
+adminPassword = "adminadmin"
+signingKey = "hC1MsGXL5epJUi8gtDbHxCd+pyjEZt/CsJPWzQCM3NCU9m7hm+lpJTNe7MjrueqXHEFu7RxAXMUDSHOINRZIxH0po2GXuKxgCUrbBBPHuyoMeF34soMUbVlirKmdAhIOXSriWjPenDMwongHxs9xLU3DivnuZkN6Bkn0L+47/k47B9YG7RirCLB5QLMPlmFUsdaFqLsC5YluxrKXqbMu4RmbXeXWH+dShddkEAXUrdgPw8nDS9XDWKtX0mozc43heTspeaT/Q11ffhAw8UvcChT9vvshWxwH+BU4rnDT4vNrNb31BF3Fn3XlxyqEdFgQLWd/8dp8nPwSZwSlyMmjbw=="
+jwtIssuer = "hC1MsGXL5epJUi8gtDbHxCd+pyjEZt/CsJPWzQCM3NCU9m7hm+lpJTNe7MjrueqXHEFu7RxAXMUDSHOINRZIxH0po2GXuKxgCUrbBBPHuyoMeF34soMUbVlirKmdAhIOXSriWjPenDMwongHxs9xLU3DivnuZkN6Bkn0L+47/k47B9YG7RirCLB5QLMPlmFUsdaFqLsC5YluxrKXqbMu4RmbXeXWH+dShddkEAXUrdgPw8nDS9XDWKtX0mozc43heTspeaT/Q11ffhAw8UvcChT9vvshWxwH+BU4rnDT4vNrNb31BF3Fn3XlxyqEdFgQLWd/8dp8nPwSZwSlyMmjbw=="
+
+[filesystem]
+storageBackend = "local"
+localDir = "filesystem"
+
+[pwa]
+PWA_APP_NAME = "Seer"
+PWA_APP_DESCRIPTION = "Seer OSINT platform"
+PWA_THEME_COLOR = "#0A0302"
+PWA_BACKGROUND_COLOR = "#ffffff"
+PWA_APP_DISPLAY = "standalone"
+PWA_APP_SCOPE = "/"
+PWA_APP_ORIENTATION = "any"
+PWA_APP_START_URL = "/"
+staticDir = "./pwa_static"

@@ -1,0 +1,55 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release-seer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install rust nightly
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: nightly-2026-08-11
+
+      - name: build seer-rs
+        run: cargo build --release -p seer-bin
+
+      - name: create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/release/seer-rs
+          generate_release_notes: true
+
+  release-nodescraper:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install rust nightly
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: nightly-2026-08-11
+
+      - name: system deps for servo
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler libclang-dev
+
+      - name: build nodescraper-rs
+        env:
+          REMOTE_URL: wss://seer.lariv.in/fleet/websocket
+        run: cargo build --release --manifest-path nodescraper-rs/Cargo.toml
+
+      - name: upload nodescraper to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: nodescraper-rs/target/release/nodescraper-rs
+          generate_release_notes: false
