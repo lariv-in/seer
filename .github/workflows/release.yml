@@ -17,7 +17,7 @@ jobs:
       - name: system deps for servo
         run: |
           sudo apt-get update
-          sudo apt-get install -y protobuf-compiler libclang-dev
+          sudo apt-get install -y protobuf-compiler libclang-dev libfontconfig1-dev pkg-config
 
       - name: install rust nightly
         uses: dtolnay/rust-toolchain@master
