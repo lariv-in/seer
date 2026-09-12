@@ -34,7 +34,7 @@ pub async fn list(
     htmx: Htmx,
 ) -> Markup {
     let models = Entity::find()
-        .order_by_desc(opensky_state::Column::LastContact)
+        .order_by_desc(opensky_state::Column::Id)
         .limit(100)
         .all(&state.db)
         .await

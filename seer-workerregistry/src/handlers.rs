@@ -40,7 +40,7 @@ pub async fn home(
 ) -> Markup {
     let active = list_active_workers();
     let recent: Vec<WorkerRunLog> = WorkerRunLogEntity::find()
-        .order_by_desc(crate::entities::worker_run_log::Column::StartedAt)
+        .order_by_desc(crate::entities::worker_run_log::Column::Id)
         .limit(50)
         .all(&state.db)
         .await

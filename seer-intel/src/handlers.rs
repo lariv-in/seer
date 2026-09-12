@@ -42,7 +42,7 @@ pub async fn list(
     htmx: Htmx,
 ) -> Markup {
     let models = IntelEntity::find()
-        .order_by_desc(intel::Column::Datetime)
+        .order_by_desc(intel::Column::Id)
         .limit(100)
         .all(&state.db)
         .await

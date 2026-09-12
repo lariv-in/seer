@@ -4,57 +4,102 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 permissions:
   contents: write
+  actions: read
 
 jobs:
-  release-seer:
+  build-and-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
+      - name: restore binaries built on master
+        id: prebuilt
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p target/release nodescraper-rs/target/release
+          echo "seer_hit=false" >> "$GITHUB_OUTPUT"
+          echo "nodescraper_hit=false" >> "$GITHUB_OUTPUT"
+          run_id="$(
+            gh run list \
+              --workflow CI \
+              --commit "${{ github.sha }}" \
+              --limit 10 \
+              --json databaseId,status,conclusion \
+              --jq '[.[] | select(.conclusion == "success")][0].databaseId
+                // [.[] | select(.status == "in_progress" or .status == "queued" or .status == "pending")][0].databaseId
+                // empty'
+          )"
+          if [ -z "$run_id" ]; then
+            echo "No CI run for ${{ github.sha }}"
+            exit 0
+          fi
+          echo "Using CI run $run_id"
+          conclusion="$(gh run view "$run_id" --json conclusion --jq '.conclusion')"
+          if [ "$conclusion" != "success" ]; then
+            if ! gh run watch "$run_id" --exit-status; then
+              echo "CI run failed"
+              exit 0
+            fi
+          fi
+          tmp="$(mktemp -d)"
+          if gh run download "$run_id" -n "seer-rs-${{ github.sha }}" -D "$tmp"; then
+            find "$tmp" -type f -name seer-rs -exec cp {} target/release/seer-rs \;
+            chmod +x target/release/seer-rs
+            test -x target/release/seer-rs
+            echo "seer_hit=true" >> "$GITHUB_OUTPUT"
+          fi
+          tmp_nodescraper="$(mktemp -d)"
+          if gh run download "$run_id" -n "nodescraper-rs-${{ github.sha }}" -D "$tmp_nodescraper"; then
+            find "$tmp_nodescraper" -type f -name nodescraper-rs -exec cp {} nodescraper-rs/target/release/nodescraper-rs \;
+            chmod +x nodescraper-rs/target/release/nodescraper-rs
+            test -x nodescraper-rs/target/release/nodescraper-rs
+            echo "nodescraper_hit=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: system deps for servo
+        if: steps.prebuilt.outputs.seer_hit != 'true' || steps.prebuilt.outputs.nodescraper_hit != 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y protobuf-compiler libclang-dev libfontconfig1-dev pkg-config
 
       - name: install rust nightly
+        if: steps.prebuilt.outputs.seer_hit != 'true' || steps.prebuilt.outputs.nodescraper_hit != 'true'
         uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: nightly-2026-08-11
+          toolchain: nightly-2026-08-27
+
+      - name: rust cache
+        if: steps.prebuilt.outputs.seer_hit != 'true' || steps.prebuilt.outputs.nodescraper_hit != 'true'
+        uses: swatinem/rust-cache@v2
+        with:
+          shared-key: Release-Cache
+          add-rust-environment-hash-key: false
+          cache-workspace-crates: true
+          save-if: ${{ github.ref == 'refs/heads/master' }}
+          workspaces: |
+            . -> target
+            nodescraper-rs -> target
 
       - name: build seer-rs
-        run: cargo build --release -p seer-bin
-
-      - name: create release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: target/release/seer-rs
-          generate_release_notes: true
-
-  release-nodescraper:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: install rust nightly
-        uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: nightly-2026-08-11
-
-      - name: system deps for servo
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y protobuf-compiler libclang-dev libfontconfig1-dev pkg-config
+        if: steps.prebuilt.outputs.seer_hit != 'true'
+        run: cargo build --release
 
       - name: build nodescraper-rs
+        if: steps.prebuilt.outputs.nodescraper_hit != 'true'
         env:
           REMOTE_URL: wss://seer.lariv.in/fleet/websocket
         run: cargo build --release --manifest-path nodescraper-rs/Cargo.toml
 
-      - name: upload nodescraper to release
+      - name: create release
         uses: softprops/action-gh-release@v2
         with:
-          files: nodescraper-rs/target/release/nodescraper-rs
-          generate_release_notes: false
+          files: |
+            target/release/seer-rs
+            nodescraper-rs/target/release/nodescraper-rs
+          generate_release_notes: true
